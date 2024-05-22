@@ -1,0 +1,63 @@
+#include<stdio.h>
+swap(int *b,int *a)
+{
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+void sort(int *pid,int *at,int *bt,int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(at[i]<at[j])
+            {
+                swap(&at[i],&at[j]);
+                swap(&bt[i],&bt[j]);
+                swap(&pid[i],&pid[j]);
+            }
+        }
+    }
+}
+int main()
+{
+    int n;
+    printf("enter the number of processes");
+    scanf("%d",&n);
+    int at[n],bt[n],pid[n];
+    int a,b;
+    for(int i=0;i<n;i++)
+    {
+        printf("enter the process arrival time and burst time");
+        scanf("%d%d",&a,&b);
+        at[i]=a;
+        bt[i]=b;
+        pid[i]=i+1;
+    }
+    sort(pid,at,bt,n);
+    float avg_tat,avg_wt;
+    int ct[n],tat[n],wt[n];
+    for(int i=0;i<n;i++)
+    {
+        if (i==0)
+        {
+            ct[i]=at[i]+bt[i];
+        }
+        else
+        {
+            ct[i]=ct[i-1]+bt[i];
+        }
+        tat[i]=ct[i]-at[i];
+        wt[i]=tat[i]-bt[i];
+        avg_tat+=tat[i];
+        avg_wt+=wt[i];
+    }
+    for(int i=0;i<n;i++)
+    {
+        printf("pid:%d\t at:%d \t bt:%d\t ct:%d\t tat:%d\t wt:%d\t\n",i,at[i],bt[i],ct[i],tat[i],wt[i]);
+
+    }
+    printf("\n%f\n%f",avg_tat/n,avg_wt/n);
+}
+
